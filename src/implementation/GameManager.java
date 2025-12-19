@@ -2,6 +2,8 @@ package implementation;
 
 public class GameManager {
 	public static void main(String[] args) {
-		System.out.println("Hello");
+		Board playerBoard = new Board();
+		playerBoard.displayBoard();
+		playerBoard.displayNames();
 	}
 }

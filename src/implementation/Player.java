@@ -12,4 +12,20 @@ public class Player {
 	public Player() {
 		this("");
 	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public boolean getWinStatus() {
+		return winStatus;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setWinStatus(boolean winStatus) {
+		this.winStatus = winStatus;
+	}
 }
