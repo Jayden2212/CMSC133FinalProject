@@ -1,5 +1,5 @@
 package implementation;
 
-public class board {
+public class Board {
 	private boolean hit;
 }
