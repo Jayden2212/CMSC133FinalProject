@@ -50,6 +50,8 @@ public class Board {
 		row -= 1;
 		col -= 1;
 		if (isValidCell(row, col) && board[row][col].getHit() == false) {
+			System.out.println("\nShot At: " + (row + 1) + "," + (col + 1));
+			
 			if (board[row][col].getHasShip()) {
 				decreaseShipHealth(board[row][col].getShipName());
 				board[row][col].setDisplay("O");
@@ -57,7 +59,6 @@ public class Board {
 				board[row][col].setDisplay("X");
 			}
 			board[row][col].setHit(true);
-			System.out.println("\nSuccesfully shot target");
 			return true;
 		}
 		System.out.println("\nIncorrect Input, Try Again");
@@ -124,18 +125,66 @@ public class Board {
 		return false;
 	}
 	
-	public void computerShoot(Player player) {
+	// computer shoots at random cells while in huntMode until it hits a boat
+	// the adjacent cells from that shot are added to an array list and huntMode is turned off
+	// when not in huntMode, it shoots at adjacent cells from the list until they are gone from the list
+	// switching back to huntMode and restarting the process
+	public void computerShoot(Computer comp, boolean huntMode) {
 		int row;
 		int col;
-		int iterations = 0;
-		do {
-			if (iterations > 100) {
-				player.setWinStatus(true);
+		if (huntMode == true) {
+			do {
+				row = (int)(Math.random() * 10) + 1;
+				col = (int)(Math.random() * 10) + 1;
+			} while (shoot(row, col) == false);
+			
+			row -= 1;
+			col -= 1;
+			if (board[row][col].getHasShip()) {
+				if (isValidCell(row - 1, col) && board[row - 1][col].getHit() == false) {
+					comp.addTargetCell((row - 1) + "," + col);
+				}
+				if (isValidCell(row, col - 1) && board[row][col - 1].getHit() == false) {
+					comp.addTargetCell(row + "," + (col - 1));
+				}
+				if (isValidCell(row, col + 1) && board[row][col + 1].getHit() == false) {
+					comp.addTargetCell(row + "," + (col + 1));
+				}
+				if (isValidCell(row + 1, col) && board[row + 1][col].getHit() == false) {
+					comp.addTargetCell((row + 1) + "," + col);
+				}
+				comp.setHuntMode(false);
 			}
-			row = (int)(Math.random() * 10) + 1;
-			col = (int)(Math.random() * 10) + 1;
-			iterations++;
-		} while (shoot(row, col) == false);
+		} else {
+			int size = comp.getTargetCellsList().size();
+			if (size > 0) {
+				int random;
+				do {
+					random = (int)(Math.random() * size);
+					row = Integer.parseInt(comp.getCell(random).substring(0,1));
+					col = Integer.parseInt(comp.getCell(random).substring(2));
+					comp.removeTargetCell(random);
+				} while (shoot(row + 1, col +  1) == false);
+				
+				if (board[row][col].getHasShip()) {
+					if (isValidCell(row - 1, col) && board[row - 1][col].getHit() == false) {
+						comp.addTargetCell((row - 1) + "," + col);
+					}
+					if (isValidCell(row, col - 1) && board[row][col - 1].getHit() == false) {
+						comp.addTargetCell(row + "," + (col - 1));
+					}
+					if (isValidCell(row, col + 1) && board[row][col + 1].getHit() == false) {
+						comp.addTargetCell(row + "," + (col + 1));
+					}
+					if (isValidCell(row + 1, col) && board[row + 1][col].getHit() == false) {
+						comp.addTargetCell((row + 1) + "," + col);
+					}
+				}
+			}
+			if (comp.getTargetCellsList().size() <= 0) {
+				comp.setHuntMode(true);
+			}
+		}
 	}
 	
 	public void computerPlaceAllShips() {

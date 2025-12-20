@@ -27,15 +27,15 @@ public class GameManager {
 		
 		for (int i = 0; i < ships.length; i++) {
 			do {
-				System.out.print("At what row would you like to place your " + ships[i].getName() + " (ex. A = 1)? ");
+				System.out.print("What ROW would you like to place your " + ships[i].getName() + "(Size = " + ships[i].getSize() + ") (ex. A = 1)? ");
 				startRow = scan.nextInt();
 				
-				System.out.print("At what column would you like to place your " + ships[i].getName() + "? ");
+				System.out.print("What COLUMN would you like to place your " + ships[i].getName() + "(Size = " + ships[i].getSize() + ")? ");
 				startCol = scan.nextInt();
 				
-				System.out.print("In what orientation (vertical or horizontal)? ");
+				System.out.print("In what orientation (enter v or h (vertical - left to right, horizontal - top to bottom))? ");
 				String direction = scan.next();
-				if (direction.equalsIgnoreCase("vertical")) {
+				if (direction.equalsIgnoreCase("v")) {
 					isVertical = true;
 				} else {
 					isVertical = false;
@@ -61,9 +61,9 @@ public class GameManager {
 				computerBoard.displayBoard();
 				
 				do {
-					System.out.println("Enter the row you would like to shoot at (ex. A = 1)? ");
+					System.out.println("Enter the ROW you would like to shoot at (ex. A = 1)? ");
 					startRow = scan.nextInt();
-					System.out.println("Enter the column you would like to shoot at? ");
+					System.out.println("Enter the COLUMN you would like to shoot at? ");
 					startCol = scan.nextInt();
 				} while (computerBoard.shoot(startRow, startCol) == false);
 				
@@ -76,19 +76,17 @@ public class GameManager {
 			else {
 				System.out.println("\nComputer's turn");
 				
+				System.out.println("Computer's shooting...");
+				playerBoard.computerShoot(computer, computer.getHuntMode());
+				
 				System.out.println("\n" + player.getName() + "'s Board");
 				playerBoard.displayBoard();
 				
-				System.out.println("Computer's shooting...");
-				playerBoard.computerShoot(player);
 				System.out.println("Type any key to continue");
 				cont = scan.next();
 				
-				System.out.println("\n" + player.getName() + "'s Board");
-				playerBoard.displayBoard();
-				
 				computer.setWinStatus(playerBoard.allShipsSunk());
-				//turn = 0;
+				turn = 0;
 			}
 		}
 		
