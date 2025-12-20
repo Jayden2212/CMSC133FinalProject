@@ -1,21 +1,21 @@
 package implementation;
 
-public class Destroyer implements Ship{
+public class Carrier implements Ship {
 	private String name;
 	private int size;
 	private boolean isVertical;
 	private boolean sunk;
 	
-	public Destroyer(boolean isVertical) {
-		name = "Destroyer";
-		size = 2;
+	public Carrier(boolean isVertical) {
+		name = "Airship Carrier";
+		size = 5;
 		this.isVertical = isVertical;
 		sunk = false;
 	}
 	
-	public Destroyer() {
-		name = "Destroyer";
-		size = 2;
+	public Carrier() {
+		name = "Airship Carrier";
+		size = 5;
 		isVertical = false;
 		sunk = false;
 	}
