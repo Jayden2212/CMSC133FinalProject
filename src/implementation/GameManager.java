@@ -61,7 +61,7 @@ public class GameManager {
 				computerBoard.displayBoard();
 				
 				do {
-					System.out.println("Enter the row you would like to shoot at? ");
+					System.out.println("Enter the row you would like to shoot at (ex. A = 1)? ");
 					startRow = scan.nextInt();
 					System.out.println("Enter the column you would like to shoot at? ");
 					startCol = scan.nextInt();
