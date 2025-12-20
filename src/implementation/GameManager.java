@@ -53,12 +53,12 @@ public class GameManager {
 		System.out.println("Type any key to continue");
 		String cont = scan.next();
 		
-		while (player.getWinStatus() == false || computer.getWinStatus() == false) {
+		while (player.getWinStatus() == false && computer.getWinStatus() == false) {
 			if (turn == 0) {
-//				System.out.println("Player " + player.getName() + " turn");
-//				
-//				System.out.println(player.getName() + "'s Board");
-//				playerBoard.displayBoard();
+				System.out.println("\nPlayer " + player.getName() + " turn");
+				
+				System.out.println(player.getName() + "'s Board");
+				playerBoard.displayBoard();
 				
 				System.out.println("\nComputer's Board");
 				computerBoard.displayBoard();
@@ -69,17 +69,30 @@ public class GameManager {
 					System.out.println("Enter the column you would like to shoot at? ");
 					startCol = scan.nextInt();
 				} while (computerBoard.shoot(startRow, startCol) == false);
-				//turn = 1;
+				
+				System.out.println("\nComputer's Board");
+				computerBoard.displayBoard();
+				
+				player.setWinStatus(computerBoard.allShipsSunk());
+				turn = 1;
 			} 
-//			else {
-//				System.out.println("Computer's turn");
-//				
-//				System.out.println(player.getName() + "'s Board");
-//				playerBoard.displayBoard();
-//				turn = 0;
-//			}
+			else {
+				System.out.println("\nComputer's turn");
+				
+				System.out.println("Computer's shooting...");
+				System.out.println("Type any key to continue");
+				cont = scan.next();
+				
+				System.out.println("\n" + player.getName() + "'s Board");
+				playerBoard.displayBoard();
+				turn = 0;
+			}
 		}
 		
-		
+		if (player.getWinStatus()) {
+			System.out.println("\nPlayer WINS!!!");
+		} else if (computer.getWinStatus()) {
+			System.out.println("\nPlayer loses.....");
+		}
 	}
 }

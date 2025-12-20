@@ -63,6 +63,33 @@ public class Board {
 		return false;
 	}
 	
+	public int nuke(char[][] array, int row, int col, String target, char replacement) {
+		if (!isValidCell(row, col)) {
+			return 0;
+		}
+		if (board[row][col].getShipName() != target) {
+			return 0;
+		}
+		if (array[row][col] == replacement) {
+			return 0;
+		}
+		
+		array[row][col] = replacement;
+		int changed = 0;
+		changed++;
+		
+		changed += nuke(array, row - 1, col - 1, target, replacement);
+		changed += nuke(array, row - 1, col, target, replacement);
+		changed += nuke(array, row - 1, col + 1, target, replacement);
+		changed += nuke(array, row, col - 1, target, replacement);
+		changed += nuke(array, row, col + 1, target, replacement);
+		changed += nuke(array, row + 1, col - 1, target, replacement);
+		changed += nuke(array, row + 1, col, target, replacement);
+		changed += nuke(array, row + 1, col + 1, target, replacement);
+		
+		return changed;
+	}
+	
 	public boolean placeShip(Ship ship, int startRow, int startCol, boolean isPlayer) {
 		// checks if all the spaces for the ship are valid and free
 		if (ships != null || !checkShip(ship.getName())) {
@@ -168,5 +195,14 @@ public class Board {
 			}
 			System.out.println();
 		}
+	}
+	
+	public boolean allShipsSunk() {
+		for (int i = 0; i < ships.size(); i++) {
+			if (ships.get(i).getSunk() == false) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
