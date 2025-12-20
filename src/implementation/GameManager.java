@@ -27,13 +27,13 @@ public class GameManager {
 		
 		for (int i = 0; i < ships.length; i++) {
 			do {
-				System.out.print("What ROW would you like to place your " + ships[i].getName() + "(Size = " + ships[i].getSize() + ") (ex. A = 1)? ");
+				System.out.print("What ROW would you like to place your " + ships[i].getName() + "(Size = " + ships[i].getSize() + ")? (ex. A = 1) ");
 				startRow = scan.nextInt();
 				
 				System.out.print("What COLUMN would you like to place your " + ships[i].getName() + "(Size = " + ships[i].getSize() + ")? ");
 				startCol = scan.nextInt();
 				
-				System.out.print("In what orientation (enter v or h (vertical - left to right, horizontal - top to bottom))? ");
+				System.out.print("In what orientation? (enter v or h, (vertical = left to right, horizontal = top to bottom)) ");
 				String direction = scan.next();
 				if (direction.equalsIgnoreCase("v")) {
 					isVertical = true;
@@ -65,7 +65,7 @@ public class GameManager {
 					startRow = scan.nextInt();
 					System.out.println("Enter the COLUMN you would like to shoot at? ");
 					startCol = scan.nextInt();
-				} while (computerBoard.shoot(startRow, startCol) == false);
+				} while (computerBoard.shoot(startRow, startCol, true) == false);
 				
 				System.out.println("\nComputer's Board");
 				computerBoard.displayBoard();

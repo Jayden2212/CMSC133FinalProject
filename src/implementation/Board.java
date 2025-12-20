@@ -2,14 +2,17 @@ package implementation;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Board {
 	private Cell[][] board;
 	private ArrayList<Ship> ships;
+	private boolean hasNuke;
 	
 	public Board() {
 		board = new Cell[10][10];
 		ships = new ArrayList<Ship>();
+		hasNuke = true;
 		
 		for (int i = 0; i < board.length; i++) {
 			String letter = "";
@@ -46,7 +49,7 @@ public class Board {
 	}
 	
 	// returns true if a shot has been successful, false otherwise
-	public boolean shoot(int row, int col) {
+	public boolean shoot(int row, int col, boolean isPlayer) {
 		row -= 1;
 		col -= 1;
 		if (isValidCell(row, col) && board[row][col].getHit() == false) {
@@ -55,6 +58,21 @@ public class Board {
 			if (board[row][col].getHasShip()) {
 				decreaseShipHealth(board[row][col].getShipName());
 				board[row][col].setDisplay("O");
+				
+				if (hasNuke == true && isPlayer) {
+					System.out.println("\nWould you like to nuke the ship you just hit (one time ability to insantly destroy a ship) (enter Y or N)? ");
+					Scanner scan = new Scanner(System.in);
+					String response = scan.next();
+					
+					if (response.equalsIgnoreCase("y")) {
+						nuke(row, col, board[row][col].getShipName(), "O");
+						this.hasNuke = false;
+					}
+				} else if (hasNuke == true && isPlayer == false) {
+					nuke(row, col, board[row][col].getShipName(), "O");
+					this.hasNuke = false;
+					System.out.println("\nComputer has used their nuke!!");
+				}
 			} else {
 				board[row][col].setDisplay("X");
 			}
@@ -65,29 +83,28 @@ public class Board {
 		return false;
 	}
 	
-	public int nuke(char[][] array, int row, int col, String target, char replacement) {
+	// recursively finds all cells starting from row, col that matches the target ship and hits all cells
+	public int nuke(int row, int col, String target, String replacement) {
 		if (!isValidCell(row, col)) {
 			return 0;
 		}
-		if (board[row][col].getShipName() != target) {
+		if (!board[row][col].getShipName().equalsIgnoreCase(target)) {
 			return 0;
 		}
-		if (array[row][col] == replacement) {
+		if (board[row][col].getHit() == true) {
 			return 0;
 		}
 		
-		array[row][col] = replacement;
+		board[row][col].setDisplay(replacement);
+		decreaseShipHealth(board[row][col].getShipName());
+		board[row][col].setHit(true);;
 		int changed = 0;
 		changed++;
 		
-		changed += nuke(array, row - 1, col - 1, target, replacement);
-		changed += nuke(array, row - 1, col, target, replacement);
-		changed += nuke(array, row - 1, col + 1, target, replacement);
-		changed += nuke(array, row, col - 1, target, replacement);
-		changed += nuke(array, row, col + 1, target, replacement);
-		changed += nuke(array, row + 1, col - 1, target, replacement);
-		changed += nuke(array, row + 1, col, target, replacement);
-		changed += nuke(array, row + 1, col + 1, target, replacement);
+		changed += nuke(row - 1, col, target, replacement);
+		changed += nuke(row, col - 1, target, replacement);
+		changed += nuke(row, col + 1, target, replacement);
+		changed += nuke(row + 1, col, target, replacement);
 		
 		return changed;
 	}
@@ -136,7 +153,7 @@ public class Board {
 			do {
 				row = (int)(Math.random() * 10) + 1;
 				col = (int)(Math.random() * 10) + 1;
-			} while (shoot(row, col) == false);
+			} while (shoot(row, col, false) == false);
 			
 			row -= 1;
 			col -= 1;
@@ -157,14 +174,14 @@ public class Board {
 			}
 		} else {
 			int size = comp.getTargetCellsList().size();
-			if (size > 0) {
+			if (!comp.getTargetCellsList().isEmpty()) {
 				int random;
 				do {
 					random = (int)(Math.random() * size);
 					row = Integer.parseInt(comp.getCell(random).substring(0,1));
 					col = Integer.parseInt(comp.getCell(random).substring(2));
 					comp.removeTargetCell(random);
-				} while (shoot(row + 1, col +  1) == false);
+				} while (shoot(row + 1, col +  1, false) == false);
 				
 				if (board[row][col].getHasShip()) {
 					if (isValidCell(row - 1, col) && board[row - 1][col].getHit() == false) {
@@ -235,7 +252,7 @@ public class Board {
 				ships.get(i).decreaseHealth();
 				if (ships.get(i).getHealth() == 0) {
 					ships.get(i).setSunk(true);
-					System.out.println("\n" + ships.get(i).getName() + " has been sunk!");
+					System.out.println("\n" + ships.get(i).getName() + " HAS BEEN SUNK!");
 				}
 			}
 		}
