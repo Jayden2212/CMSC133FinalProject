@@ -45,6 +45,7 @@ public class Board {
 		return ships.size();
 	}
 	
+	// returns true if a shot has been successful, false otherwise
 	public boolean shoot(int row, int col) {
 		row -= 1;
 		col -= 1;
@@ -112,7 +113,7 @@ public class Board {
 				board[currentRow][currentCol].setHasShip(true);
 				board[currentRow][currentCol].setShipName(ship.getName());
 				
-				if (!isPlayer) {
+				if (isPlayer) {
 					board[currentRow][currentCol].setDisplay(ship.getName().substring(0, 1));
 				}
 			}
@@ -123,7 +124,21 @@ public class Board {
 		return false;
 	}
 	
-	public void computerPlaceAllShips(Board board) {
+	public void computerShoot(Player player) {
+		int row;
+		int col;
+		int iterations = 0;
+		do {
+			if (iterations > 100) {
+				player.setWinStatus(true);
+			}
+			row = (int)(Math.random() * 10) + 1;
+			col = (int)(Math.random() * 10) + 1;
+			iterations++;
+		} while (shoot(row, col) == false);
+	}
+	
+	public void computerPlaceAllShips() {
 		Ship[] ships = {new Carrier(), new Battleship(), new Cruiser(), new Submarine(), new Destroyer()};
 		int startRow;
 		int startCol;
@@ -136,7 +151,7 @@ public class Board {
 				startCol = (int)(Math.random() * 10) + 1;
 				isVertical = rand.nextBoolean();
 				ships[i].setIsVertical(isVertical);
-			} while (board.placeShip(ships[i], startRow, startCol, false) == false);
+			} while (placeShip(ships[i], startRow, startCol, false) == false);
 		}
 	}
 	
@@ -171,7 +186,7 @@ public class Board {
 				ships.get(i).decreaseHealth();
 				if (ships.get(i).getHealth() == 0) {
 					ships.get(i).setSunk(true);
-					System.out.println(ships.get(i).getName() + " has been sunk!");
+					System.out.println("\n" + ships.get(i).getName() + " has been sunk!");
 				}
 			}
 		}
