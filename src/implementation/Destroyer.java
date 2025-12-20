@@ -5,19 +5,18 @@ public class Destroyer implements Ship{
 	private int size;
 	private boolean isVertical;
 	private boolean sunk;
+	private int health;
 	
 	public Destroyer(boolean isVertical) {
 		name = "Destroyer";
 		size = 2;
 		this.isVertical = isVertical;
 		sunk = false;
+		health = 2;
 	}
 	
 	public Destroyer() {
-		name = "Destroyer";
-		size = 2;
-		isVertical = false;
-		sunk = false;
+		this(false);
 	}
 	
 	public String getName() {
@@ -28,11 +27,27 @@ public class Destroyer implements Ship{
 		return size;
 	}
 	
+	public int getHealth() {
+		return health;
+	}
+	
 	public boolean getIsVertical() {
 		return isVertical;
 	}
 	
+	public boolean getSunk() {
+		return sunk;
+	}
+	
 	public void setIsVertical(boolean isVertical) {
 		this.isVertical = isVertical;
+	}
+	
+	public void decreaseHealth() {
+		health -= 1;
+	}
+	
+	public void setSunk(boolean sunk) {
+		this.sunk = sunk;
 	}
 }

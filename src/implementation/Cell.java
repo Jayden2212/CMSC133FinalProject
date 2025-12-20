@@ -4,12 +4,14 @@ public class Cell {
 	private boolean hit;
 	private String name;
 	private boolean hasShip;
+	private String shipName;
 	private String display;
 	
 	public Cell(String name) {
 		this.name = name;
 		hit = false;
 		hasShip = false;
+		shipName = "";
 		display = "-";
 	}
 	
@@ -29,6 +31,10 @@ public class Cell {
 		return display;
 	}
 	
+	public String getShipName() {
+		return shipName;
+	}
+	
 	public void setHit(boolean hit) {
 		this.hit = hit;
 	}
@@ -39,5 +45,9 @@ public class Cell {
 	
 	public void setDisplay(String display) {
 		this.display = display;
+	}
+	
+	public void setShipName(String shipName) {
+		this.shipName = shipName;
 	}
 }

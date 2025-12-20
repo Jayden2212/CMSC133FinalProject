@@ -45,6 +45,24 @@ public class Board {
 		return ships.size();
 	}
 	
+	public boolean shoot(int row, int col) {
+		row -= 1;
+		col -= 1;
+		if (isValidCell(row, col) && board[row][col].getHit() == false) {
+			if (board[row][col].getHasShip()) {
+				decreaseShipHealth(board[row][col].getShipName());
+				board[row][col].setDisplay("O");
+			} else {
+				board[row][col].setDisplay("X");
+			}
+			board[row][col].setHit(true);
+			System.out.println("\nSuccesfully shot target");
+			return true;
+		}
+		System.out.println("\nIncorrect Input, Try Again");
+		return false;
+	}
+	
 	public boolean placeShip(Ship ship, int startRow, int startCol, boolean isPlayer) {
 		// checks if all the spaces for the ship are valid and free
 		if (ships != null || !checkShip(ship.getName())) {
@@ -65,8 +83,9 @@ public class Board {
 				int currentRow = ship.getIsVertical() ? startRow + i : startRow;
 				int currentCol = ship.getIsVertical() ? startCol : startCol + i;
 				board[currentRow][currentCol].setHasShip(true);
+				board[currentRow][currentCol].setShipName(ship.getName());
 				
-				if (isPlayer) {
+				if (!isPlayer) {
 					board[currentRow][currentCol].setDisplay(ship.getName().substring(0, 1));
 				}
 			}
@@ -119,6 +138,17 @@ public class Board {
 		return false;
 	}
 	
+	public void decreaseShipHealth(String name) {
+		for (int i = 0; i < ships.size(); i++) {
+			if (ships.get(i).getName().equalsIgnoreCase(name)) {
+				ships.get(i).decreaseHealth();
+				if (ships.get(i).getHealth() == 0) {
+					ships.get(i).setSunk(true);
+					System.out.println(ships.get(i).getName() + " has been sunk!");
+				}
+			}
+		}
+	}
 	
 	public void displayBoard() {
 		System.out.println("  1 2 3 4 5 6 7 8 9 10");
