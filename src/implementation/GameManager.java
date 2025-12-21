@@ -1,4 +1,5 @@
 package implementation;
+//import  textFiles;
 import java.util.*;
 
 public class GameManager {
@@ -10,6 +11,8 @@ public class GameManager {
 		Player player = new Player();
 		Computer computer = new Computer();
 		int turn = 0;
+		int row;
+		int col;
 		
 		System.out.println("Welcome to the game of Batleship!! The goal of the game is to take down "
 				+ "\nall five of the enemies ships while keeping your ships alive through turn based action. Good Luck!");
@@ -18,33 +21,53 @@ public class GameManager {
 		String name = scan.next();
 		player.setName(name);
 		
-		playerBoard.displayBoard();
+		System.out.println("\nWould you like to use a pre-made board (enter Y or N)? ");
+		String choice = scan.next();
 		
-		int startRow;
-		int startCol;
-		boolean isVertical;
-		Ship[] ships = {new Carrier(), new Battleship(), new Cruiser(), new Submarine(), new Destroyer()};
-		
-		for (int i = 0; i < ships.length; i++) {
+		if (choice.equalsIgnoreCase("Y")) {
+			int numChoice;
 			do {
-				System.out.print("What ROW would you like to place your " + ships[i].getName() + "(Size = " + ships[i].getSize() + ")? (ex. A = 1) ");
-				startRow = scan.nextInt();
-				
-				System.out.print("What COLUMN would you like to place your " + ships[i].getName() + "(Size = " + ships[i].getSize() + ")? ");
-				startCol = scan.nextInt();
-				
-				System.out.print("In what orientation? (enter v or h, (vertical = left to right, horizontal = top to bottom)) ");
-				String direction = scan.next();
-				if (direction.equalsIgnoreCase("v")) {
-					isVertical = true;
-				} else {
-					isVertical = false;
-				}
-				ships[i].setIsVertical(isVertical);
-			} while (playerBoard.placeShip(ships[i], startRow, startCol, true) == false);
+				System.out.println("Which Board (1, 2, or 3)? ");
+				numChoice = scan.nextInt();
+			} while (numChoice != 1 && numChoice != 2 && numChoice != 3);
 			
+			if (numChoice == 1) {
+				playerBoard.createBoardUsingFile("BattleshipBoard1.txt", true);
+				playerBoard.displayBoard();
+			} else if (numChoice == 2) {
+				playerBoard.createBoardUsingFile("BattleshipBoard2.txt", true);
+				playerBoard.displayBoard();
+			} else {
+				playerBoard.createBoardUsingFile("BattleshipBoard3.txt", true);
+				playerBoard.displayBoard();
+			}
+		} else {
 			playerBoard.displayBoard();
-			System.out.println("Total # of Ships On The Board: " + playerBoard.getTotalShips());
+			
+			boolean isVertical;
+			Ship[] ships = {new Carrier(), new Battleship(), new Cruiser(), new Submarine(), new Destroyer()};
+			
+			for (int i = 0; i < ships.length; i++) {
+				do {
+					System.out.print("What ROW would you like to place your " + ships[i].getName() + "(Size = " + ships[i].getSize() + ")? (ex. A = 1) ");
+					row = scan.nextInt();
+					
+					System.out.print("What COLUMN would you like to place your " + ships[i].getName() + "(Size = " + ships[i].getSize() + ")? ");
+					col = scan.nextInt();
+					
+					System.out.print("In what orientation? (enter v or h, (vertical = left to right, horizontal = top to bottom)) ");
+					String direction = scan.next();
+					if (direction.equalsIgnoreCase("v")) {
+						isVertical = true;
+					} else {
+						isVertical = false;
+					}
+					ships[i].setIsVertical(isVertical);
+				} while (playerBoard.placeShip(ships[i], row, col, true) == false);
+				
+				playerBoard.displayBoard();
+				System.out.println("Total # of Ships On The Board: " + playerBoard.getTotalShips());
+			}
 		}
 		
 		System.out.println("\nComputer's placing their ships...");
@@ -62,10 +85,10 @@ public class GameManager {
 				
 				do {
 					System.out.println("Enter the ROW you would like to shoot at (ex. A = 1)? ");
-					startRow = scan.nextInt();
+					row = scan.nextInt();
 					System.out.println("Enter the COLUMN you would like to shoot at? ");
-					startCol = scan.nextInt();
-				} while (computerBoard.shoot(startRow, startCol, true) == false);
+					col = scan.nextInt();
+				} while (computerBoard.shoot(row, col, true) == false);
 				
 				System.out.println("\nComputer's Board");
 				computerBoard.displayBoard();

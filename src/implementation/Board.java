@@ -3,6 +3,7 @@ package implementation;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import java.io.*;
 
 public class Board {
 	private Cell[][] board;
@@ -140,6 +141,49 @@ public class Board {
 			return true;
 		}
 		return false;
+	}
+	
+	// reads each text file line by line, updating cells with ships on it as necessary
+	public void createBoardUsingFile(String fileName, boolean isPlayer) {
+		try {
+			Scanner scan = new Scanner(new File(fileName));
+			int row = 0;
+			
+			while (scan.hasNextLine()) {
+				String currentLine = scan.nextLine();
+				String[] displayCells = currentLine.split(" ");
+				
+				for (int i = 0; i < displayCells.length; i++) {
+					if (!displayCells[i].equalsIgnoreCase("-")) {
+						board[row][i].setHasShip(true);
+						
+						if (displayCells[i].equalsIgnoreCase("A")) {
+							board[row][i].setShipName("Airship Carrier");
+						} else if (displayCells[i].equalsIgnoreCase("B")) {
+							board[row][i].setShipName("Battleship");
+						} else if (displayCells[i].equalsIgnoreCase("C")) {
+							board[row][i].setShipName("Cruiser");
+						} else if (displayCells[i].equalsIgnoreCase("S")) {
+							board[row][i].setShipName("Submarine");
+						} else if (displayCells[i].equalsIgnoreCase("D")) {
+							board[row][i].setShipName("Destroyer");
+						}
+						
+						if (isPlayer) {
+							board[row][i].setDisplay(displayCells[i]);
+						}
+					}
+				}
+				row += 1;
+			}
+			ships.add(new Carrier());
+			ships.add(new Battleship());
+			ships.add(new Cruiser());
+			ships.add(new Submarine());
+			ships.add(new Destroyer());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// computer shoots at random cells while in huntMode until it hits a boat
