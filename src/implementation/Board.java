@@ -84,7 +84,7 @@ public class Board {
 		return false;
 	}
 	
-	// recursively finds all cells starting from row, col that matches the target ship and hits all cells
+	// recursively finds all cells starting from (row, col) that matches the target ship and hits all cells
 	public int nuke(int row, int col, String target, String replacement) {
 		if (!isValidCell(row, col)) {
 			return 0;
@@ -110,6 +110,7 @@ public class Board {
 		return changed;
 	}
 	
+	// returns true if a ship has successfully been placed at a valid position, false otherwise
 	public boolean placeShip(Ship ship, int startRow, int startCol, boolean isPlayer) {
 		// checks if all the spaces for the ship are valid and free
 		if (ships != null || !checkShip(ship.getName())) {
@@ -254,6 +255,7 @@ public class Board {
 		}
 	}
 	
+	// places ships at random positions and orientations until it's valid
 	public void computerPlaceAllShips() {
 		Ship[] ships = {new Carrier(), new Battleship(), new Cruiser(), new Submarine(), new Destroyer()};
 		int startRow;
@@ -271,7 +273,7 @@ public class Board {
 		}
 	}
 	
-	
+	// returns true if the row and column passed are valid positions on the board, false otherwise
 	public boolean isValidCell(int row, int col) {
 		if (row >= 0 && row < board.length && col >= 0 && col < board[0].length) {
 			return true;
@@ -279,6 +281,7 @@ public class Board {
 		return false;
 	}
 	
+	// returns true if the cell has a ship on it, false otherwise
 	public boolean isOccupiedCell(int row, int col) {
 		if (board[row][col].getHasShip()) {
 			return true;
@@ -296,6 +299,7 @@ public class Board {
 		return false;
 	}
 	
+	// returns true if the ship specified has sunk, false otherwise
 	public boolean checkShipSunkStatus(String name) {
 		for (int i = 0; i < ships.size(); i++) {
 			if (ships.get(i).getName().equals(name)) {
@@ -307,6 +311,7 @@ public class Board {
 		return false;
 	}
 	
+	// decreases the specified ship's health by one, if health has reached zero, the ships sunk status is set true
 	public void decreaseShipHealth(String name) {
 		for (int i = 0; i < ships.size(); i++) {
 			if (ships.get(i).getName().equalsIgnoreCase(name)) {
@@ -319,6 +324,7 @@ public class Board {
 		}
 	}
 	
+	// displays String representation of the Board
 	public void displayBoard() {
 		System.out.println("  1 2 3 4 5 6 7 8 9 10");
 		for (int i = 0; i < board.length; i++) {
@@ -339,6 +345,7 @@ public class Board {
 		}
 	}
 	
+	// checks if all the ships on the board have sunk
 	public boolean allShipsSunk() {
 		for (int i = 0; i < ships.size(); i++) {
 			if (ships.get(i).getSunk() == false) {
