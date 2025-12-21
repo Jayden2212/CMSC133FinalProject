@@ -113,7 +113,7 @@ public class GameManager {
 				cont = scan.next();
 				
 				computer.setWinStatus(playerBoard.allShipsSunk());
-				//turn = 0;
+				turn = 0;
 			}
 		}
 		
