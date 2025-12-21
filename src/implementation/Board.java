@@ -145,6 +145,7 @@ public class Board {
 	
 	// reads each text file line by line, updating cells with ships on it as necessary
 	public void createBoardUsingFile(String fileName, boolean isPlayer) {
+		resetBoard();
 		try {
 			Scanner scan = new Scanner(new File(fileName));
 			int row = 0;
@@ -218,6 +219,7 @@ public class Board {
 			}
 		} else {
 			int size = comp.getTargetCellsList().size();
+			
 			if (!comp.getTargetCellsList().isEmpty()) {
 				int random;
 				do {
@@ -240,6 +242,10 @@ public class Board {
 					if (isValidCell(row + 1, col) && board[row + 1][col].getHit() == false) {
 						comp.addTargetCell((row + 1) + "," + col);
 					}
+				}
+				
+				if (checkShipSunkStatus(board[row][col].getShipName()) == true) {
+					comp.clearTargetCells();
 				}
 			}
 			if (comp.getTargetCellsList().size() <= 0) {
@@ -290,6 +296,17 @@ public class Board {
 		return false;
 	}
 	
+	public boolean checkShipSunkStatus(String name) {
+		for (int i = 0; i < ships.size(); i++) {
+			if (ships.get(i).getName().equals(name)) {
+				if (ships.get(i).getSunk() == true) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	public void decreaseShipHealth(String name) {
 		for (int i = 0; i < ships.size(); i++) {
 			if (ships.get(i).getName().equalsIgnoreCase(name)) {
@@ -329,5 +346,29 @@ public class Board {
 			}
 		}
 		return true;
+	}
+	
+	public void resetBoard() {
+		board = new Cell[10][10];
+		ships = new ArrayList<Ship>();
+		hasNuke = true;
+		
+		for (int i = 0; i < board.length; i++) {
+			String letter = "";
+			for (int j = 0; j < board[i].length; j++) {
+				if (i == 0) {letter = "A";}
+				else if (i == 1) {letter = "B";}
+				else if (i == 2) {letter = "C";}
+				else if (i == 3) {letter = "D";}
+				else if (i == 4) {letter = "E";}
+				else if (i == 5) {letter = "F";}
+				else if (i == 6) {letter = "G";}
+				else if (i == 7) {letter = "H";}
+				else if (i == 8) {letter = "I";}
+				else if (i == 9) {letter = "J";}
+				
+				board[i][j] = new Cell(letter + (j + 1));
+			}
+		}
 	}
 }

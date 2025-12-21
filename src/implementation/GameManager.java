@@ -25,22 +25,27 @@ public class GameManager {
 		String choice = scan.next();
 		
 		if (choice.equalsIgnoreCase("Y")) {
-			int numChoice;
 			do {
-				System.out.println("Which Board (1, 2, or 3)? ");
-				numChoice = scan.nextInt();
-			} while (numChoice != 1 && numChoice != 2 && numChoice != 3);
-			
-			if (numChoice == 1) {
-				playerBoard.createBoardUsingFile("BattleshipBoard1.txt", true);
-				playerBoard.displayBoard();
-			} else if (numChoice == 2) {
-				playerBoard.createBoardUsingFile("BattleshipBoard2.txt", true);
-				playerBoard.displayBoard();
-			} else {
-				playerBoard.createBoardUsingFile("BattleshipBoard3.txt", true);
-				playerBoard.displayBoard();
-			}
+				int numChoice;
+				do {
+					System.out.println("Which board would you like to preview (1, 2, or 3)? ");
+					numChoice = scan.nextInt();
+				} while (numChoice != 1 && numChoice != 2 && numChoice != 3);
+				
+				if (numChoice == 1) {
+					playerBoard.createBoardUsingFile("BattleshipBoard1.txt", true);
+					playerBoard.displayBoard();
+				} else if (numChoice == 2) {
+					playerBoard.createBoardUsingFile("BattleshipBoard2.txt", true);
+					playerBoard.displayBoard();
+				} else {
+					playerBoard.createBoardUsingFile("BattleshipBoard3.txt", true);
+					playerBoard.displayBoard();
+				}
+				
+				System.out.println("Is this your choice (enter Y or N)? ");
+				choice = scan.next();
+			} while (!choice.equalsIgnoreCase("Y"));
 		} else {
 			playerBoard.displayBoard();
 			
@@ -109,7 +114,7 @@ public class GameManager {
 				cont = scan.next();
 				
 				computer.setWinStatus(playerBoard.allShipsSunk());
-				turn = 0;
+				//turn = 0;
 			}
 		}
 		

@@ -36,6 +36,10 @@ public class Computer extends Player{
 		targetCells.remove(index);
 	}
 	
+	public void clearTargetCells() {
+		targetCells.clear();
+	}
+	
 	public String displayAllTargetCells() {
 		String str = "";
 		for (int i = 0; i < targetCells.size(); i++) {
