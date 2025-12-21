@@ -34,15 +34,8 @@ public class Board {
 		}
 	}
 	
-	public Cell getCell(String name) {
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
-				if (board[i][j].getName().equalsIgnoreCase(name)) {
-					return board[i][j];
-				}
-			}
-		}
-		return null;
+	public Cell getCell(int row, int col) {
+		return board[row][col];
 	}
 	
 	public int getTotalShips() {
@@ -84,7 +77,7 @@ public class Board {
 		return false;
 	}
 	
-	// recursively finds all cells starting from (row, col) that matches the target ship and hits all cells
+	// recursively finds all cells starting from (row, column) that matches the target ship and hits all cells
 	public int nuke(int row, int col, String target, String replacement) {
 		if (!isValidCell(row, col)) {
 			return 0;
@@ -377,5 +370,18 @@ public class Board {
 				board[i][j] = new Cell(letter + (j + 1));
 			}
 		}
+	}
+	
+	public void setHasNuke(boolean hasNuke) {
+		this.hasNuke = hasNuke;
+	}
+	
+	public Ship getShip(String name) {
+		for (int i = 0; i < ships.size(); i++) {
+			if (ships.get(i).getName().equals(name)) {
+				return ships.get(i);
+			}
+		}
+		return null;
 	}
 }
